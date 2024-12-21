@@ -1,0 +1,9 @@
+bin/
+obj/
+.vs/
+.git/
+.user
+*.user
+*.csproj.user
+Points4Revit.ACD.bundle/
+Points4Revit.RVT.bundle/

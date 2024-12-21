@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>Points4Revit</Name>
+    <Assembly>.\Points4Revit\Points4Revit.RVT\Points4Revit.RVT.bundle\Contents\2024\Points4Revit.RVT.dll</Assembly>
+    <AddInId>9B89D1E6-4ABA-46EB-9B99-5DE5BB8FC54F</AddInId>
+    <FullClassName>Points4Revit.App</FullClassName>
+	  <VendorId>Sergey Shevtsov</VendorId>
+    <VendorDescription>https://linkedin.com/in/sergey-shevtsov-b3205058</VendorDescription>
+    <Description>A tool to create elements in a Revit project with external points input.</Description>
+  </AddIn>
+</RevitAddIns>

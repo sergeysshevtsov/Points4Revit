@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35514.174 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Points4Revit.ACD", "Points4Revit.ACD\Points4Revit.ACD.csproj", "{AE26C51E-3750-42C2-82DC-03CAAE27C1FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Points4Revit.RVT", "Points4Revit.RVT\Points4Revit.RVT.csproj", "{884B3B89-EB2E-458A-A37C-72D216FAA765}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		d_v2024|Any CPU = d_v2024|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE26C51E-3750-42C2-82DC-03CAAE27C1FC}.d_v2024|Any CPU.ActiveCfg = d_v2024|Any CPU
+		{AE26C51E-3750-42C2-82DC-03CAAE27C1FC}.d_v2024|Any CPU.Build.0 = d_v2024|Any CPU
+		{884B3B89-EB2E-458A-A37C-72D216FAA765}.d_v2024|Any CPU.ActiveCfg = d_v2024|Any CPU
+		{884B3B89-EB2E-458A-A37C-72D216FAA765}.d_v2024|Any CPU.Build.0 = d_v2024|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
