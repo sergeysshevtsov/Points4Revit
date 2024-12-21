@@ -1,18 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using Points4Revit.Core.Enums;
+using System.Collections.Generic;
 
 namespace Points4Revit.Core
 {
     public class ObjectData
     {
-        public LineData LineData { get; set; }
+        public ObjectType ObjectType { get; set; }
         public List<PointData> PointData { get; set; }
-    }
-
-    public class LineData
-    {
-        public string LineId { get; set; }
-        public string LineType { get; set; }
-        public bool? IsPolylineClosed { get; set; }
     }
 
     public class PointData

@@ -5,6 +5,7 @@ using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.Runtime;
 using Newtonsoft.Json;
 using Points4Revit.Core;
+using Points4Revit.Core.Enums;
 using System.Collections.Generic;
 using System.IO;
 
@@ -14,7 +15,7 @@ namespace Points4Revit.ACD
     {
         private readonly string pathToTmpFile = Path.Combine(Path.GetTempPath(), "p4r");
 
-        [CommandMethod("point2revit", CommandFlags.UsePickSet | CommandFlags.Redraw | CommandFlags.Modal)]
+        [CommandMethod("point4revit", CommandFlags.UsePickSet | CommandFlags.Redraw | CommandFlags.Modal)]
         public void Points2Revit()
         {
             Document document = Application.DocumentManager.MdiActiveDocument;
@@ -33,21 +34,21 @@ namespace Points4Revit.ACD
                 {
                     var objectData = new ObjectData()
                     {
-                        LineData = null,
+                        ObjectType = ObjectType.Point,
                         PointData = new List<PointData>()
-                    {
-                        new PointData(){ X = point.X, Y = point.Y, Z = point.Z }
-                    }
+                        {
+                            new PointData() { X = point.X, Y = point.Y, Z = point.Z }
+                        }
                     };
 
-                    editor.WriteMessage(string.Join(" ", objectData.PointData));
+                    editor.WriteMessage($"Point data transmitted!");
                     File.WriteAllText(Path.Combine(Path.GetTempPath(), "p4r"), JsonConvert.SerializeObject(objectData));
                 }
             }
             while (promptPointResult.Status != PromptStatus.Cancel);
         }
 
-        [CommandMethod("line2revit", CommandFlags.UsePickSet | CommandFlags.Redraw | CommandFlags.Modal)]
+        [CommandMethod("line4revit", CommandFlags.UsePickSet | CommandFlags.Redraw | CommandFlags.Modal)]
         public void PickFirstTest()
         {
             Document document = Application.DocumentManager.MdiActiveDocument;
@@ -56,7 +57,7 @@ namespace Points4Revit.ACD
             PromptSelectionResult promptSelectionResult;
             PromptSelectionOptions selectionOpts = new PromptSelectionOptions
             {
-                MessageForAdding = "\nSelect line: ",
+                MessageForAdding = "\nSelect line or polyline: ",
                 SingleOnly = true
             };
 
@@ -79,30 +80,23 @@ namespace Points4Revit.ACD
                             Entity ent = (Entity)tr.GetObject(objectId, OpenMode.ForRead);
                             var type = ent.GetType();
 
-                            var lineData = new LineData()
-                            {
-                                LineId = ent.Id.ToString(),
-                                LineType = type.ToString()
-                            };
-
                             if (type == typeof(Line))
                             {
                                 var line = ent as Line;
                                 var sp = line.StartPoint;
                                 var ep = line.EndPoint;
-                                lineData.IsPolylineClosed = null;
 
                                 var objectData = new ObjectData()
                                 {
-                                    LineData = lineData,
+                                    ObjectType = ObjectType.Line,
                                     PointData = new List<PointData>()
-                                {
-                                    new PointData() { X = sp.X, Y = sp.Y, Z = sp.Z },
-                                    new PointData() { X = ep.X, Y = ep.Y, Z = ep.Z }
-                                }
+                                    {
+                                        new PointData() { X = sp.X, Y = sp.Y, Z = sp.Z },
+                                        new PointData() { X = ep.X, Y = ep.Y, Z = ep.Z }
+                                    }
                                 };
 
-                                editor.WriteMessage(string.Join(" ", objectData.PointData));
+                                editor.WriteMessage($"Line data ({line.Id}) transmitted!");
                                 File.WriteAllText(pathToTmpFile, JsonConvert.SerializeObject(objectData));
                             }
 
@@ -117,14 +111,13 @@ namespace Points4Revit.ACD
                                     points.Add(new PointData() { X = pt.X, Y = pt.Y, Z = pt.Z });
                                 }
 
-                                lineData.IsPolylineClosed = pline.Closed;
                                 var objectData = new ObjectData()
                                 {
-                                    LineData = lineData,
+                                    ObjectType = ObjectType.Polyline,
                                     PointData = points
                                 };
 
-                                editor.WriteMessage(string.Join(" ", objectData.PointData));
+                                editor.WriteMessage($"Polyline data ({pline.Id}) transmitted!");
                                 File.WriteAllText(pathToTmpFile, JsonConvert.SerializeObject(objectData));
                             }
                             ent.Dispose();
