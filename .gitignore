@@ -7,3 +7,4 @@ obj/
 *.csproj.user
 Points4Revit.ACD.bundle/
 Points4Revit.RVT.bundle/
+packages/
