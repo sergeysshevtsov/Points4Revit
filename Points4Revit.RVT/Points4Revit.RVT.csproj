@@ -40,23 +40,58 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AdWindows">
+      <HintPath>..\Points4Revit.DLL\Revit\2024\AdWindows.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="RevitAPI">
+      <HintPath>..\Points4Revit.DLL\Revit\2024\RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>..\Points4Revit.DLL\Revit\2024\RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="AppCommands\CmdWallsCreation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\WallsCreation\WallsCreaitonDataContext.cs" />
+    <Compile Include="UI\WallsCreation\WallsCreationWindow.xaml.cs">
+      <DependentUpon>WallsCreationWindow.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UI\WallThickness\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Ribbon\32x32\WallsCreation.png" />
+    <Resource Include="Resources\Images\Ribbon\32x32\WallThickness.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="UI\WallsCreation\WallsCreationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if $(ConfigurationName) == D2024 (
-set v=2024)
+set v=2024 
+set p=2024\Points4Revit.addin)
 del "%25AppData%25\Autodesk\Revit\Addins\%25v%25\Points4Revit.addin"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
