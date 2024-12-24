@@ -44,6 +44,9 @@
       <HintPath>..\Points4Revit.DLL\Revit\2024\AdWindows.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="RevitAPI">
@@ -69,10 +72,12 @@
     <Compile Include="App.cs" />
     <Compile Include="AppCommands\CmdWallsCreation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\WallsCreation\WallsCreaitonDataContext.cs" />
+    <Compile Include="RevitService\CreateWallByPoints.cs" />
+    <Compile Include="UI\WallsCreation\WallsCreationDataContext.cs" />
     <Compile Include="UI\WallsCreation\WallsCreationWindow.xaml.cs">
       <DependentUpon>WallsCreationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\WindowsHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="UI\WallThickness\" />
@@ -86,6 +91,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Points4Revit.Core\Points4Revit.Core.csproj">
+      <Project>{FDADBD8D-E97F-4B54-8E89-028A68025A39}</Project>
+      <Name>Points4Revit.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

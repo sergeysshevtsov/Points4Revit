@@ -1,28 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Autodesk.Revit.DB;
+using Newtonsoft.Json;
+using Points4Revit.Core;
+using Points4Revit.RVT.RevitService;
+using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Points4Revit.RVT.UI.WallsCreation
 {
-    /// <summary>
-    /// Interaction logic for WallsCreationWindow.xaml
-    /// </summary>
-    public partial class WallsCreationWindow : UserControl
+    public partial class WallsCreationWindow : Window
     {
-        public WallsCreationWindow()
+        private readonly Document document;
+        private readonly FileSystemWatcher pointFileSystemWatcher;
+        private readonly string pathTempFile;
+
+        public WallsCreationWindow(Document document)
         {
             InitializeComponent();
+            this.document = document;
+
+            DirectoryInfo parentDir = Directory.GetParent(Common.pathToTmpFile);
+            pathTempFile = Path.Combine(parentDir.Parent.FullName, "p4r");
+
+            pointFileSystemWatcher = new FileSystemWatcher()
+            {
+                Path = Path.GetDirectoryName(pathTempFile),
+                NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite,
+                Filter = Path.GetFileName(pathTempFile),
+                EnableRaisingEvents = true
+            };
+        }
+
+        private void WindowLoaded(object sender, RoutedEventArgs e)
+        {
+            pointFileSystemWatcher.Changed += new FileSystemEventHandler(OnPointFileChanged);
+            DataContext = new WallsCreationDataContext();
+        }
+
+        private void WindowClosed(object sender, System.EventArgs e)
+        {
+            pointFileSystemWatcher.Changed -= new FileSystemEventHandler(OnPointFileChanged);
+            Utils.WindowsHandler.DisposeWCW();
+        }
+
+        private int fileSystemWatcherCounter = 0;
+        private void OnPointFileChanged(object sender, FileSystemEventArgs e)
+        {
+            fileSystemWatcherCounter++;
+            if (fileSystemWatcherCounter == 2)
+            {
+                var objectData = string.Empty;
+                try
+                {
+                    using (StreamReader sr = new StreamReader(pathTempFile, Encoding.Default))
+                    {
+                        objectData = sr.ReadToEnd();
+                        sr.Close();
+                    }
+
+                    base.Dispatcher.Invoke(() =>
+                    {
+                        if (!string.IsNullOrEmpty(objectData))
+                            if (JsonConvert.DeserializeObject<ObjectData>(objectData) is ObjectData od)
+                                CreateWallByPoints.Commit(document, (WallsCreationDataContext)DataContext, od);
+                    });
+                }
+                catch { }
+
+                fileSystemWatcherCounter = 0;
+            }
         }
     }
 }

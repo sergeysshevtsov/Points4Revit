@@ -13,7 +13,7 @@ namespace Points4Revit.ACD
 {
     public class App
     {
-        private readonly string pathToTmpFile = Path.Combine(Path.GetTempPath(), "p4r");
+       
 
         [CommandMethod("point4revit", CommandFlags.UsePickSet | CommandFlags.Redraw | CommandFlags.Modal)]
         public void Points2Revit()
@@ -42,7 +42,7 @@ namespace Points4Revit.ACD
                     };
 
                     editor.WriteMessage($"Point data transmitted!");
-                    File.WriteAllText(Path.Combine(Path.GetTempPath(), "p4r"), JsonConvert.SerializeObject(objectData));
+                    File.WriteAllText(Common.pathToTmpFile, JsonConvert.SerializeObject(objectData));
                 }
             }
             while (promptPointResult.Status != PromptStatus.Cancel);
@@ -97,7 +97,7 @@ namespace Points4Revit.ACD
                                 };
 
                                 editor.WriteMessage($"Line data ({line.Id}) transmitted!");
-                                File.WriteAllText(pathToTmpFile, JsonConvert.SerializeObject(objectData));
+                                File.WriteAllText(Common.pathToTmpFile, JsonConvert.SerializeObject(objectData));
                             }
 
                             if (type == typeof(Polyline))
@@ -114,11 +114,12 @@ namespace Points4Revit.ACD
                                 var objectData = new ObjectData()
                                 {
                                     ObjectType = ObjectType.Polyline,
+                                    ObjectSettings = pline.Closed,
                                     PointData = points
                                 };
 
                                 editor.WriteMessage($"Polyline data ({pline.Id}) transmitted!");
-                                File.WriteAllText(pathToTmpFile, JsonConvert.SerializeObject(objectData));
+                                File.WriteAllText(Common.pathToTmpFile, JsonConvert.SerializeObject(objectData));
                             }
                             ent.Dispose();
                         }

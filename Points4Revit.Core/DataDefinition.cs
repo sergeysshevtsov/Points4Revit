@@ -6,6 +6,7 @@ namespace Points4Revit.Core
     public class ObjectData
     {
         public ObjectType ObjectType { get; set; }
+        public object ObjectSettings { get; set; } = null;
         public List<PointData> PointData { get; set; }
     }
 

@@ -1,6 +1,8 @@
 ﻿using Autodesk.Revit.UI;
+using Autodesk.Revit.UI.Events;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Windows.Media.Imaging;
 
@@ -8,6 +10,13 @@ namespace Points4Revit.RVT
 {
     public class App : IExternalApplication
     {
+        private static Queue<Action<UIApplication>> _tasks;
+
+        public App()
+        {
+           
+        }
+
         public Result OnShutdown(UIControlledApplication application)
         {
             return Result.Succeeded;
@@ -16,10 +25,36 @@ namespace Points4Revit.RVT
         public Result OnStartup(UIControlledApplication application)
         {
             if (!AddMenu(application, string.Empty))
-            {
                 return Result.Failed;
-            }
+
+            _tasks = new Queue<Action<UIApplication>>();
+            application.Idling += OnIdling;
             return Result.Succeeded;
+        }
+
+        private void OnIdling(object sender, IdlingEventArgs e)
+        {
+            var app = (UIApplication)sender;
+
+            lock (_tasks)
+            {
+                if (_tasks.Count == 0)
+                {
+                    return;
+                }
+
+                if (_tasks.Count > 0)
+                {
+                    Action<UIApplication> task = _tasks.Dequeue();
+                    task(app);
+                }
+            }
+        }
+
+        public static void EnqueueTask(Action<UIApplication> task)
+        {
+            lock (_tasks)
+                _tasks.Enqueue(task);
         }
 
         private bool AddMenu(UIControlledApplication application, string tabname)
