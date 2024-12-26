@@ -4,7 +4,9 @@ using Points4Revit.Core;
 using Points4Revit.RVT.RevitService;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Points4Revit.RVT.UI.WallsCreation
 {
@@ -34,13 +36,19 @@ namespace Points4Revit.RVT.UI.WallsCreation
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
             pointFileSystemWatcher.Changed += new FileSystemEventHandler(OnPointFileChanged);
-            DataContext = new WallsCreationDataContext();
+            DataContext = new WallsCreationDataContext(document, this);
         }
 
         private void WindowClosed(object sender, System.EventArgs e)
         {
             pointFileSystemWatcher.Changed -= new FileSystemEventHandler(OnPointFileChanged);
             Utils.WindowsHandler.DisposeWCW();
+        }
+
+        private void DoubleOnlyTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex(@"^-?\d*(\.\d*)?$");
+            e.Handled = !regex.IsMatch(e.Text);
         }
 
         private int fileSystemWatcherCounter = 0;

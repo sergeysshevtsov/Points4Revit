@@ -2,10 +2,175 @@
     x:Class="Points4Revit.RVT.UI.WallsCreation.WallsCreationWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Points4Revit.RVT.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Points4Revit.RVT.UI.WallsCreation"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Wall creation options"
     Closed="WindowClosed"
-    Loaded="WindowLoaded">
-    <Grid />
+    Loaded="WindowLoaded"
+    ResizeMode="NoResize"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBoolConverter" />
+    </Window.Resources>
+
+    <Grid Margin="1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="130" />
+            <ColumnDefinition Width="150" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="0"
+            VerticalAlignment="Center"
+            Text="Bottom level:"
+            TextAlignment="Center" />
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            VerticalAlignment="Center"
+            Text="Top level:"
+            TextAlignment="Center" />
+
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="0"
+            VerticalAlignment="Center"
+            Text="Wall height:"
+            TextAlignment="Center" />
+
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="0"
+            VerticalAlignment="Center"
+            Text="Wall type:"
+            TextAlignment="Center" />
+
+        <TextBlock
+            Grid.Row="4"
+            Grid.Column="0"
+            VerticalAlignment="Center"
+            Text="Wall center line:"
+            TextAlignment="Center" />
+
+        <TextBlock
+            Grid.Row="5"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            VerticalAlignment="Center"
+            Text="Draw original model line"
+            TextAlignment="Center" />
+
+        <TextBlock
+            Grid.Row="6"
+            Grid.Column="0"
+            VerticalAlignment="Center"
+            Text="Line type name:"
+            TextAlignment="Center" />
+
+        <TextBlock
+            Grid.Row="7"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            VerticalAlignment="Center"
+            Text="Wall chain creation mode"
+            TextAlignment="Center" />
+
+        <ComboBox
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="0,1,0,1"
+            DisplayMemberPath="Name"
+            ItemsSource="{Binding BottomLevels}"
+            SelectedItem="{Binding BottomLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValuePath="Id" />
+
+        <ComboBox
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="0,1,0,1"
+            DisplayMemberPath="Name"
+            ItemsSource="{Binding TopLevels}"
+            SelectedItem="{Binding TopLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValuePath="Id">
+            <ComboBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ComboBoxItem}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsActive}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ComboBox.ItemContainerStyle>
+        </ComboBox>
+
+        <TextBox
+            Grid.Row="2"
+            Grid.Column="1"
+            Margin="0,1,0,1"
+            IsEnabled="{Binding BottomAndTopLevelsAreEqual, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolConverter}}"
+            PreviewTextInput="DoubleOnlyTextBox_PreviewTextInput"
+            Text="{Binding WallHeight}" />
+
+        <ComboBox
+            Grid.Row="3"
+            Grid.Column="1"
+            Margin="0,1,0,1"
+            DisplayMemberPath="Name"
+            ItemsSource="{Binding WallTypes}"
+            SelectedItem="{Binding WallType, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValuePath="Id" />
+
+        <ComboBox
+            Grid.Row="4"
+            Grid.Column="1"
+            Margin="0,1,0,1"
+            SelectedIndex="{Binding WallLocationLineIndex}">
+            <ComboBoxItem Content="Interior" />
+            <ComboBoxItem Content="Center" />
+            <ComboBoxItem Content="Exterior" />
+        </ComboBox>
+
+        <CheckBox
+            x:Name="drawLine"
+            Grid.Row="5"
+            Grid.Column="1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            IsChecked="{Binding DrawOriginalModelLine, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            IsEnabled="{Binding LineDrawingIsAvailable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <ComboBox
+            Grid.Row="6"
+            Grid.Column="1"
+            Margin="0,1,0,1"
+            DisplayMemberPath="Name"
+            IsEnabled="{Binding DrawOriginalModelLine, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+            ItemsSource="{Binding LineTypes}"
+            SelectedItem="{Binding LineType, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValuePath="Id" />
+
+
+        <CheckBox
+            Grid.Row="7"
+            Grid.Column="1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            IsChecked="{Binding ChainWallMode, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" />
+
+    </Grid>
 </Window>
