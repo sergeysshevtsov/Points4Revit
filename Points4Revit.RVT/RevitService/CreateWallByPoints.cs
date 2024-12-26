@@ -7,7 +7,7 @@ namespace Points4Revit.RVT.RevitService
 {
     public class CreateWallByPoints
     {
-        public static List<PointData> wallPointsCreationMode = new List<PointData>();
+        public static List<PointData> WallPointsCreationMode { get; set; } = new List<PointData>();
         public static List<ElementId> Commit(Document document, WallsCreationDataContext dc, ObjectData objectData)
         {
             App.EnqueueTask((uiapp) =>
@@ -18,42 +18,42 @@ namespace Points4Revit.RVT.RevitService
 
                     var objectType = objectData.ObjectType;
                     var points = objectData.PointData;
+                    var elementIDList = new List<ElementId>();
 
                     switch (objectType)
                     {
                         case Core.Enums.ObjectType.Point:
+                            WallPointsCreationMode.Add(points[0]);
+                            if (WallPointsCreationMode.Count == 2)
+                            {
+                                var ep = WallPointsCreationMode[1];
+                                CreateWallByPointsData(document, WallPointsCreationMode[0], WallPointsCreationMode[1], dc, ref elementIDList);
+                                WallPointsCreationMode.Clear();
+                                if (dc.ChainWallMode)
+                                    WallPointsCreationMode.Add(ep);
+                            }
                             break;
                         case Core.Enums.ObjectType.Line:
-                            {
-                                var sp = new XYZ(points[0].X, points[0].Y, points[0].Z);
-                                var ep = new XYZ(points[1].X, points[1].Y, points[1].Z);
-                                CreateWallByPointsData(document, sp, ep, dc);
-                                break;
-                            }
+                            WallPointsCreationMode.Clear();
+                            CreateWallByPointsData(document, points[0], points[1], dc, ref elementIDList);
+                            break;
                         case Core.Enums.ObjectType.Polyline:
-                            {
-                                for (var i = 0; i < points.Count - 1; i++)
-                                {
-                                    var sp = new XYZ(points[i].X, points[i].Y, points[i].Z);
-                                    var ep = new XYZ(points[i + 1].X, points[i + 1].Y, points[i + 1].Z);
-                                    CreateWallByPointsData(document, sp, ep, dc);
+                            WallPointsCreationMode.Clear();
+                            for (var i = 0; i < points.Count - 1; i++)
+                                CreateWallByPointsData(document, points[i], points[i + 1], dc, ref elementIDList);
 
-                                }
-
-                                if ((bool)objectData.ObjectSettings)
-                                {
-                                    var sp = new XYZ(points[points.Count - 1].X, points[points.Count - 1].Y, points[points.Count - 1].Z);
-                                    var ep = new XYZ(points[0].X, points[0].Y, points[0].Z);
-                                    CreateWallByPointsData(document, sp, ep, dc);
-                                }
-                                break;
-                            }
-                        default:
+                            if ((bool)objectData.ObjectSettings)
+                                CreateWallByPointsData(document, points[points.Count - 1], points[0], dc, ref elementIDList);
                             break;
                     }
 
-                    var transactionStatus = tr.Commit();
+                    if (dc.ZoomToCreatedWalls)
+                    {
+                        uiapp.ActiveUIDocument.ShowElements(elementIDList);
+                        uiapp.ActiveUIDocument.Selection.SetElementIds(elementIDList);
+                    }
 
+                    var transactionStatus = tr.Commit();
                 }
             });
             return null;
@@ -102,12 +102,15 @@ namespace Points4Revit.RVT.RevitService
 
             return wall;
         }
-        private static Wall CreateWallByPointsData(Document document, XYZ startPoint, XYZ endPoint, WallsCreationDataContext dc) 
+        private static Wall CreateWallByPointsData(Document document, PointData startPoint, PointData endPoint, WallsCreationDataContext dc, ref List<ElementId> elementIDList)
         {
-            var line = Line.CreateBound(startPoint, endPoint);
+            var sp = new XYZ(startPoint.X, startPoint.Y, startPoint.Z);
+            var ep = new XYZ(endPoint.X, endPoint.Y, endPoint.Z);
+            var line = Line.CreateBound(sp, ep);
             var wall = CreateWall(document, line, dc);
             if (dc.DrawOriginalModelLine)
                 CreateModelLine.Commit(document, line, dc.LineType.Id);
+            elementIDList.Add(wall.Id);
             return wall;
         }
     }

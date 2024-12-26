@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using Points4Revit.Core;
+using Points4Revit.RVT.RevitService;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -31,11 +32,11 @@ namespace Points4Revit.RVT.UI.WallsCreation
             BottomLevel = BottomLevels[0];
 
             var wallTypes = (from wallType in new FilteredElementCollector(document).OfClass(typeof(WallType)).ToElements()
-                         select new ElementData()
-                         {
-                             Id = wallType.Id,
-                             Name = wallType.Name,
-                         })
+                             select new ElementData()
+                             {
+                                 Id = wallType.Id,
+                                 Name = wallType.Name,
+                             })
                         .ToList();
 
             if (wallTypes.Count == 0)
@@ -47,11 +48,11 @@ namespace Points4Revit.RVT.UI.WallsCreation
                .Cast<GraphicsStyle>()
                .Where(gs => gs.GraphicsStyleCategory.CategoryType == CategoryType.Annotation ||
                             gs.GraphicsStyleCategory.CategoryType == CategoryType.Model)
-                         select new ElementData()
-                         {
-                             Id = lineType.Id,
-                             Name = lineType.Name,
-                         })
+                             select new ElementData()
+                             {
+                                 Id = lineType.Id,
+                                 Name = lineType.Name,
+                             })
               .ToList();
 
             if (lineTypes.Count == 0)
@@ -145,8 +146,6 @@ namespace Points4Revit.RVT.UI.WallsCreation
             set => lineType = value;
         }
 
-        public bool ChainWallMode { get; set; }
-
         private bool bottomAndTopLevelsAreEqual = true;
         public bool BottomAndTopLevelsAreEqual
         {
@@ -160,6 +159,28 @@ namespace Points4Revit.RVT.UI.WallsCreation
         {
             get => lineDrawingIsAvailable;
             set => lineDrawingIsAvailable = value;
+        }
+
+        private bool chainWallMode = true;
+        public bool ChainWallMode
+        {
+            get => chainWallMode;
+            set
+            {
+                chainWallMode = value;
+                CreateWallByPoints.WallPointsCreationMode = new List<PointData>();
+            }
+        }
+
+        private bool zoomToCreatedWalls = true;
+        public bool ZoomToCreatedWalls
+        {
+            get => zoomToCreatedWalls;
+            set
+            {
+                zoomToCreatedWalls = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ZoomToCreatedWalls"));
+            }
         }
     }
 }
