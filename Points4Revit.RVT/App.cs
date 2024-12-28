@@ -2,7 +2,6 @@
 using Autodesk.Revit.UI.Events;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using System.Windows.Media.Imaging;
 
@@ -75,12 +74,12 @@ namespace Points4Revit.RVT
                 //
                 //TODO: button for wall thickness calculation
                 //
-                //rb.AddItem(
-                //    new PushButtonData("cmdWallThickness", "Wall\nThickness", assemblyPath, "Points4Revit.RVT.AppCommands.CmdWallThickness")
-                //    {
-                //        ToolTip = "Change selecrted wall thickness",
-                //        LargeImage = new BitmapImage(new Uri(string.Concat(resourceString, "32x32/WallThickness.png")))
-                //    });
+                rb.AddItem(
+                    new PushButtonData("cmdWallThickness", "Wall\nThickness", assemblyPath, "Points4Revit.RVT.AppCommands.CmdCreateWallThicknessCreation")
+                    {
+                        ToolTip = "Change selecrted wall thickness",
+                        LargeImage = new BitmapImage(new Uri(string.Concat(resourceString, "32x32/WallThickness.png")))
+                    });
             }
             catch
             {

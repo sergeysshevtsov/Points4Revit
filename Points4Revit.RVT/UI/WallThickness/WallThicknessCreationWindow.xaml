@@ -1,0 +1,74 @@
+﻿<Window
+    x:Class="Points4Revit.RVT.UI.WallThickness.WallThicknessCreationWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Points4Revit.RVT.UI.WallThickness"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Wall thickness creation options"
+    Closed="WindowClosed"
+    Loaded="WindowLoaded"
+    ResizeMode="NoResize"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterOwner">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="150" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            VerticalAlignment="Center"
+            Text="Number of selected walls:"
+            TextAlignment="Left" />
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            VerticalAlignment="Center"
+            Text="Wall type:"
+            TextAlignment="Left" />
+
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            VerticalAlignment="Center"
+            Text="Apply newly created wall type to selection"
+            TextAlignment="Left" />
+
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            FontWeight="Bold"
+            Text="{Binding NumberOfSelectedWalls}"
+            TextAlignment="Center" />
+
+        <ComboBox
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="0,1,0,1"
+            DisplayMemberPath="Name"
+            ItemsSource="{Binding WallTypes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding WallType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValuePath="Id" />
+
+        <CheckBox
+            Grid.Row="2"
+            Grid.Column="1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            IsChecked="{Binding ApplyNewWallType, UpdateSourceTrigger=PropertyChanged}"
+            IsEnabled="{Binding SelectionExists}" />
+    </Grid>
+</Window>

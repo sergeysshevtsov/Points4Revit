@@ -6,10 +6,9 @@ namespace Points4Revit.RVT.Utils
     internal class WindowsHandler
     {
         private static WallsCreationWindow wallsCreationWindow;
-
         public static WallsCreationWindow CreateWCW(Document document)
         {
-            if (null == wallsCreationWindow)
+            if (wallsCreationWindow == null)
                 return wallsCreationWindow = new WallsCreationWindow(document);
             else
             {
@@ -17,9 +16,7 @@ namespace Points4Revit.RVT.Utils
                 return DisposeWCW();
             }
         }
-
         public static WallsCreationWindow DisposeWCW() => wallsCreationWindow = null;
-
         public static Autodesk.Revit.UI.Result ShowWindow(System.Windows.Window window)
         {
             if (window != null)

@@ -16,7 +16,7 @@
         <converters:InverseBooleanConverter x:Key="InverseBoolConverter" />
     </Window.Resources>
 
-    <Grid Margin="1,10,10,10">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
             <RowDefinition Height="25" />
@@ -29,7 +29,7 @@
             <RowDefinition Height="25" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="130" />
+            <ColumnDefinition Width="90" />
             <ColumnDefinition Width="150" />
         </Grid.ColumnDefinitions>
 
@@ -38,35 +38,35 @@
             Grid.Column="0"
             VerticalAlignment="Center"
             Text="Bottom level:"
-            TextAlignment="Center" />
+            TextAlignment="Left" />
 
         <TextBlock
             Grid.Row="1"
             Grid.Column="0"
             VerticalAlignment="Center"
             Text="Top level:"
-            TextAlignment="Center" />
+            TextAlignment="Left" />
 
         <TextBlock
             Grid.Row="2"
             Grid.Column="0"
             VerticalAlignment="Center"
             Text="Wall height:"
-            TextAlignment="Center" />
+            TextAlignment="Left" />
 
         <TextBlock
             Grid.Row="3"
             Grid.Column="0"
             VerticalAlignment="Center"
             Text="Wall type:"
-            TextAlignment="Center" />
+            TextAlignment="Left" />
 
         <TextBlock
             Grid.Row="4"
             Grid.Column="0"
             VerticalAlignment="Center"
             Text="Wall center line:"
-            TextAlignment="Center" />
+            TextAlignment="Left" />
 
         <TextBlock
             Grid.Row="5"
@@ -74,14 +74,14 @@
             Grid.ColumnSpan="2"
             VerticalAlignment="Center"
             Text="Draw original model line"
-            TextAlignment="Center" />
+            TextAlignment="Left" />
 
         <TextBlock
             Grid.Row="6"
             Grid.Column="0"
             VerticalAlignment="Center"
             Text="Line type name:"
-            TextAlignment="Center" />
+            TextAlignment="Left" />
 
         <TextBlock
             Grid.Row="7"
@@ -89,7 +89,7 @@
             Grid.ColumnSpan="2"
             VerticalAlignment="Center"
             Text="Wall chain creation mode"
-            TextAlignment="Center" />
+            TextAlignment="Left" />
 
         <TextBlock
             Grid.Row="8"
@@ -97,7 +97,7 @@
             Grid.ColumnSpan="2"
             VerticalAlignment="Center"
             Text="Zoom to created walls"
-            TextAlignment="Center" />
+            TextAlignment="Left" />
 
         <ComboBox
             Grid.Row="0"

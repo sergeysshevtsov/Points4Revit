@@ -13,20 +13,18 @@ namespace Points4Revit.ACD
 {
     public class App
     {
-       
-
-        [CommandMethod("point4revit", CommandFlags.UsePickSet | CommandFlags.Redraw | CommandFlags.Modal)]
-        public void Points2Revit()
+        [CommandMethod("point4revit_wall", CommandFlags.UsePickSet | CommandFlags.Redraw | CommandFlags.Modal)]
+        public void Points2RevitWall()
         {
             Document document = Application.DocumentManager.MdiActiveDocument;
             Editor editor = document.Editor;
 
-            PromptPointResult promptPointResult;
+            PromptPointResult promptPointResult = null;
             PromptPointOptions promptPointOptions = new PromptPointOptions("");
 
             do
             {
-                promptPointOptions.Message = "\nPick point (Press ESC for Cancel): ";
+                promptPointOptions.Message = $"\nPick point (Press ESC for Cancel): ";
                 promptPointResult = editor.GetPoint(promptPointOptions);
                 Point3d point = promptPointResult.Value;
 
@@ -36,9 +34,9 @@ namespace Points4Revit.ACD
                     {
                         ObjectType = ObjectType.Point,
                         PointData = new List<PointData>()
-                        {
-                            new PointData() { X = point.X, Y = point.Y, Z = point.Z }
-                        }
+                    {
+                        new PointData() { X = point.X, Y = point.Y, Z = point.Z }
+                    }
                     };
 
                     editor.WriteMessage($"Point data transmitted!");
@@ -46,6 +44,37 @@ namespace Points4Revit.ACD
                 }
             }
             while (promptPointResult.Status != PromptStatus.Cancel);
+        }
+
+        [CommandMethod("point4revit_wallthickness", CommandFlags.UsePickSet | CommandFlags.Redraw | CommandFlags.Modal)]
+        public void Points2RevitWallThickness()
+        {
+            Document document = Application.DocumentManager.MdiActiveDocument;
+            Editor editor = document.Editor;
+
+            PromptPointResult promptPointResult = null;
+            PromptPointOptions promptPointOptions = new PromptPointOptions("");
+
+            int i = 0;
+            do
+            {
+                promptPointOptions.Message = $"\nPick 3 points of the wall (2 points from one side of the wall and 1 from other): ";
+                promptPointResult = editor.GetPoint(promptPointOptions);
+                Point3d point = promptPointResult.Value;
+
+                var objectData = new ObjectData()
+                {
+                    ObjectType = ObjectType.Point,
+                    PointData = new List<PointData>()
+                    {
+                        new PointData() { X = point.X, Y = point.Y, Z = point.Z }
+                    }
+                };
+
+                File.WriteAllText(Common.pathToTmpFile, JsonConvert.SerializeObject(objectData));
+                i++;
+            }
+            while (i != 3);
         }
 
         [CommandMethod("line4revit", CommandFlags.UsePickSet | CommandFlags.Redraw | CommandFlags.Modal)]
