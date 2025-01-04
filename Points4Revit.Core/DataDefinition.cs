@@ -29,4 +29,15 @@ namespace Points4Revit.Core
         public double Elevation { get; set; }
         public bool IsActive { get; set; }
     }
+
+    public class CategoryData : ElementData
+    {
+        public Category Category { get; set; }
+    }
+
+    public class FamilyData : ElementData
+    {
+        public FamilySymbol FamilySymbol { get; set; }
+        public string FamilyType { get; set; }
+    }
 }

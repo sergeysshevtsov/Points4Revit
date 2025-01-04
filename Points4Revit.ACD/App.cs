@@ -13,7 +13,7 @@ namespace Points4Revit.ACD
 {
     public class App
     {
-        [CommandMethod("point4revit_wall", CommandFlags.UsePickSet | CommandFlags.Redraw | CommandFlags.Modal)]
+        [CommandMethod("point4revit", CommandFlags.UsePickSet | CommandFlags.Redraw | CommandFlags.Modal)]
         public void Points2RevitWall()
         {
             Document document = Application.DocumentManager.MdiActiveDocument;

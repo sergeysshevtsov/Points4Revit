@@ -1,22 +1,23 @@
 ﻿<Window
-    x:Class="Points4Revit.WPF.MainWindow"
+    x:Class="Points4Revit.RVT.UI.FamilyCreation.FamilyCreationWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Points4Revit.WPF"
+    xmlns:local="clr-namespace:Points4Revit.RVT.UI.FamilyCreation"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Closed="WindowClosed"
+    Loaded="WindowLoaded"
     ResizeMode="NoResize"
     SizeToContent="WidthAndHeight"
-    WindowStartupLocation="CenterScreen">
+    WindowStartupLocation="CenterOwner">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
             <RowDefinition Height="25" />
             <RowDefinition Height="25" />
-            <RowDefinition Height="25" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="25" />
+            <ColumnDefinition Width="100" />
             <ColumnDefinition Width="150" />
         </Grid.ColumnDefinitions>
 
@@ -24,54 +25,47 @@
             Grid.Row="0"
             Grid.Column="0"
             VerticalAlignment="Center"
-            Text="X:"
+            Text="Category:"
             TextAlignment="Left" />
 
         <TextBlock
             Grid.Row="1"
             Grid.Column="0"
             VerticalAlignment="Center"
-            Text="Y:"
+            Text="Family type:"
             TextAlignment="Left" />
 
         <TextBlock
             Grid.Row="2"
             Grid.Column="0"
             VerticalAlignment="Center"
-            Text="Z:"
+            Text="Family:"
             TextAlignment="Left" />
 
-        <TextBox
+        <ComboBox
             Grid.Row="0"
             Grid.Column="1"
-            Margin="1"
-            PreviewTextInput="DoubleOnlyTextBox_PreviewTextInput"
-            Text="{Binding X, UpdateSourceTrigger=PropertyChanged}"
-            TextAlignment="Left" />
+            Margin="0,1,0,1"
+            DisplayMemberPath="Name"
+            ItemsSource="{Binding Categories, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValuePath="Name" />
 
-        <TextBox
+        <TextBlock
             Grid.Row="1"
             Grid.Column="1"
-            Margin="1"
             VerticalAlignment="Center"
-            PreviewTextInput="DoubleOnlyTextBox_PreviewTextInput"
-            Text="{Binding Y, UpdateSourceTrigger=PropertyChanged}"
+            Text="{Binding Family.FamilyType, UpdateSourceTrigger=PropertyChanged}"
             TextAlignment="Left" />
 
-        <TextBox
+        <ComboBox
             Grid.Row="2"
             Grid.Column="1"
-            Margin="1"
-            PreviewTextInput="DoubleOnlyTextBox_PreviewTextInput"
-            Text="{Binding Z, UpdateSourceTrigger=PropertyChanged}"
-            TextAlignment="Left" />
-        <Button
-            Grid.Row="3"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Margin="1"
-            Click="Button_Click"
-            Content="Send!" />
+            Margin="0,1,0,1"
+            DisplayMemberPath="Name"
+            ItemsSource="{Binding Families, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding Family, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValuePath="Name" />
 
     </Grid>
 </Window>

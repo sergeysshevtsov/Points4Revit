@@ -71,12 +71,18 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="AppCommands\CmdCreateWallThicknessCreation.cs" />
+    <Compile Include="AppCommands\CmdFamilyCreation.cs" />
     <Compile Include="AppCommands\CmdWallsCreation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RevitService\CreateFamilyByPoint.cs" />
     <Compile Include="RevitService\CreateModelLine.cs" />
     <Compile Include="RevitService\CreateWallByPoints.cs" />
     <Compile Include="RevitService\CreateWallThicknessByPoints.cs" />
     <Compile Include="UI\Converters\InverseBooleanConverter.cs" />
+    <Compile Include="UI\FamilyCreation\FamilyCreationDataContext.cs" />
+    <Compile Include="UI\FamilyCreation\FamilyCreationWindow.xaml.cs">
+      <DependentUpon>FamilyCreationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\WallsCreation\WallsCreationDataContext.cs" />
     <Compile Include="UI\WallsCreation\WallsCreationWindow.xaml.cs">
       <DependentUpon>WallsCreationWindow.xaml</DependentUpon>
@@ -87,12 +93,18 @@
     </Compile>
     <Compile Include="Utils\WindowsHandler.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Images\Ribbon\32x32\FamilyCreation.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Ribbon\32x32\WallsCreation.png" />
     <Resource Include="Resources\Images\Ribbon\32x32\WallThickness.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="UI\FamilyCreation\FamilyCreationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\WallsCreation\WallsCreationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

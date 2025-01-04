@@ -71,14 +71,18 @@ namespace Points4Revit.RVT
                         LargeImage = new BitmapImage(new Uri(string.Concat(resourceString, "32x32/WallsCreation.png")))
                     });
 
-                //
-                //TODO: button for wall thickness calculation
-                //
                 rb.AddItem(
                     new PushButtonData("cmdWallThickness", "Wall\nThickness", assemblyPath, "Points4Revit.RVT.AppCommands.CmdCreateWallThicknessCreation")
                     {
                         ToolTip = "Change selecrted wall thickness",
                         LargeImage = new BitmapImage(new Uri(string.Concat(resourceString, "32x32/WallThickness.png")))
+                    });
+
+                rb.AddItem(
+                    new PushButtonData("cmdFamilyCreation", "Family\nCreation", assemblyPath, "Points4Revit.RVT.AppCommands.CmdFamilyCreation")
+                    {
+                        ToolTip = "Create family instance using external point",
+                        LargeImage = new BitmapImage(new Uri(string.Concat(resourceString, "32x32/FamilyCreation.png")))
                     });
             }
             catch

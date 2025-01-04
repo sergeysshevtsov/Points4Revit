@@ -1,28 +1,41 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Points4Revit.Core;
+using Points4Revit.Core.Enums;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Points4Revit.WPF
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainWindowDataContext();
+        }
+
+        private void DoubleOnlyTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex(@"^-?\d*(\.\d*)?$");
+            e.Handled = !regex.IsMatch(e.Text);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var dc = DataContext as MainWindowDataContext;
+            var objectData = new ObjectData()
+            {
+                ObjectType = ObjectType.Point,
+                PointData = new List<PointData>()
+                    {
+                        new PointData() { X = dc.X, Y = dc.Y, Z = dc.Z }
+                    }
+            };
+
+            File.WriteAllText(Common.pathToTmpFile, JsonConvert.SerializeObject(objectData));
         }
     }
 }
