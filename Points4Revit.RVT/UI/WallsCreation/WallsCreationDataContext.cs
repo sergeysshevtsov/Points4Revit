@@ -172,7 +172,7 @@ namespace Points4Revit.RVT.UI.WallsCreation
             }
         }
 
-        private bool zoomToCreatedWalls = true;
+        private bool zoomToCreatedWalls = false;
         public bool ZoomToCreatedWalls
         {
             get => zoomToCreatedWalls;

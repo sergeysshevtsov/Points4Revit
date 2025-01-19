@@ -31,6 +31,9 @@ namespace Points4Revit.RVT
             return Result.Succeeded;
         }
 
+        //Idling process requires for running wall creation window modeless
+        //this process prevents to run command if other process is running
+        //allows to access to the document from outside app as modeless window
         private void OnIdling(object sender, IdlingEventArgs e)
         {
             var app = (UIApplication)sender;
@@ -62,22 +65,24 @@ namespace Points4Revit.RVT
             {
                 var assemblyPath = Assembly.GetExecutingAssembly().Location;
                 var resourceString = "pack://application:,,,/Points4Revit.RVT;component/Resources/Images/Ribbon/";
-
+                //Create Points4Revit ribbon
+                //if tabname is empty use default Add-In tab
                 var rb = GetRibbonPanel(application, "Points4Revit", tabname);
+                //Add ribbon button wall creation
                 rb.AddItem(
                     new PushButtonData("cmdWallsCreation", "Walls\nCreation", assemblyPath, "Points4Revit.RVT.AppCommands.CmdWallsCreation")
                     {
                         ToolTip = "Create walls using external points",
                         LargeImage = new BitmapImage(new Uri(string.Concat(resourceString, "32x32/WallsCreation.png")))
                     });
-
+                //Add ribbon button wall thickness creation
                 rb.AddItem(
                     new PushButtonData("cmdWallThickness", "Wall\nThickness", assemblyPath, "Points4Revit.RVT.AppCommands.CmdCreateWallThicknessCreation")
                     {
                         ToolTip = "Change selecrted wall thickness",
                         LargeImage = new BitmapImage(new Uri(string.Concat(resourceString, "32x32/WallThickness.png")))
                     });
-
+                //Add ribbon button family creation
                 rb.AddItem(
                     new PushButtonData("cmdFamilyCreation", "Family\nCreation", assemblyPath, "Points4Revit.RVT.AppCommands.CmdFamilyCreation")
                     {
