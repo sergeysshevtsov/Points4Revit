@@ -49,7 +49,12 @@ namespace Points4Revit.RVT.RevitService
 
                         string wtpName = dc.WallType.Name;
                         double value = Math.Round(distance, 2);
-                        newWallType = selectedWallType.Duplicate(wtpName + "_" + value) as WallType;
+
+                        var newWallTypeName = wtpName + "_" + value;
+                        if (dc.WallTypes.FirstOrDefault(wt => wt.Name.Equals(newWallTypeName)) is ElementData elementData)
+                            elementId = elementData.Id;
+
+                        newWallType = selectedWallType.Duplicate(newWallTypeName) as WallType;
                         CompoundStructure cs = newWallType.GetCompoundStructure();
                         double layerWidth = value;
 
