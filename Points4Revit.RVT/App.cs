@@ -11,16 +11,7 @@ namespace Points4Revit.RVT
     {
         private static Queue<Action<UIApplication>> _tasks;
 
-        public App()
-        {
-           
-        }
-
-        public Result OnShutdown(UIControlledApplication application)
-        {
-            return Result.Succeeded;
-        }
-
+        public Result OnShutdown(UIControlledApplication application) => Result.Succeeded;
         public Result OnStartup(UIControlledApplication application)
         {
             if (!AddMenu(application, string.Empty))
@@ -37,13 +28,10 @@ namespace Points4Revit.RVT
         private void OnIdling(object sender, IdlingEventArgs e)
         {
             var app = (UIApplication)sender;
-
             lock (_tasks)
             {
                 if (_tasks.Count == 0)
-                {
                     return;
-                }
 
                 if (_tasks.Count > 0)
                 {
@@ -98,6 +86,7 @@ namespace Points4Revit.RVT
             return true;
         }
 
+        //get ribbon panel by ribbon and tab name
         private RibbonPanel GetRibbonPanel(UIControlledApplication application, string ribbonName, string tabName = null)
         {
             IList<RibbonPanel> ribbonPanels;

@@ -3,7 +3,6 @@ using Points4Revit.Core;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Controls;
 
 namespace Points4Revit.RVT.UI.FamilyCreation
 {
@@ -41,14 +40,11 @@ namespace Points4Revit.RVT.UI.FamilyCreation
             set
             {
                 category = value;
-                var familiesInCategory = new List<FamilyData>();
-                foreach (FamilySymbol family in new FilteredElementCollector(document).OfClass(typeof(FamilySymbol)).WhereElementIsElementType())
-                {
-                    var c = family.Category;
-                    var n = family.Name;
-                    if (family.Category != null && family.Category.Id == Category.Id)
-                        familiesInCategory.Add(new FamilyData() { Id = family.Id, Name = family.Name, FamilySymbol = family, FamilyType = family.FamilyName });
-                }
+                var familiesInCategory = (from FamilySymbol family in new FilteredElementCollector(document).OfClass(typeof(FamilySymbol)).WhereElementIsElementType()
+                                          let c = family.Category
+                                          let n = family.Name
+                                          where family.Category != null && family.Category.Id == Category.Id
+                                          select new FamilyData() { Id = family.Id, Name = family.Name, FamilySymbol = family, FamilyType = family.FamilyName }).ToList();
                 Families = familiesInCategory;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Families"));
 

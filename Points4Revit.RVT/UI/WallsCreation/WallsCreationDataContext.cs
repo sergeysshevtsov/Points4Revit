@@ -36,8 +36,7 @@ namespace Points4Revit.RVT.UI.WallsCreation
                              {
                                  Id = wallType.Id,
                                  Name = wallType.Name,
-                             })
-                        .ToList();
+                             }).ToList();
 
             if (wallTypes.Count == 0)
                 window.Close();
@@ -52,8 +51,7 @@ namespace Points4Revit.RVT.UI.WallsCreation
                              {
                                  Id = lineType.Id,
                                  Name = lineType.Name,
-                             })
-              .ToList();
+                             }).ToList();
 
             if (lineTypes.Count == 0)
                 LineDrawingIsAvailable = false;

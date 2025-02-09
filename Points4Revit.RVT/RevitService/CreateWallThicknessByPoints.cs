@@ -88,8 +88,7 @@ namespace Points4Revit.RVT.RevitService
                                      {
                                          Id = wallType.Id,
                                          Name = wallType.Name,
-                                     })
-                    .ToList();
+                                     }).ToList();
 
                     dc.WallTypes = wallTypes.OrderBy(e => e.Name).ToList();
                     dc.WallType = wallTypes.First(w => w.Id.Equals(elementId));
