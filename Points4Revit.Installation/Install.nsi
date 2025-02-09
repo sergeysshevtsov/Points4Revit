@@ -1,7 +1,7 @@
 !define PRODUCT_NAME "Points4Revit"
 !define RVT_BUNDLE_NAME "${PRODUCT_NAME}.RVT.bundle"
 !define ACD_BUNDLE_NAME "${PRODUCT_NAME}.ACD.bundle"
-!define BUNDLE_VERSION "1.0.0.0"
+!define BUNDLE_VERSION "1.0.0.1"
 !define PUBLISHER "Sergey Shevtsov"
 
 Name "${PRODUCT_NAME}_${BUNDLE_VERSION}"
@@ -59,12 +59,26 @@ Section "${PRODUCT_NAME}.Revit" Section1
 	SectionIn RO
 	SetShellVarContext "all"
 	SetOverwrite on
+
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${BUNDLE_NAME}" "DisplayIcon" "$APPDATA\Autodesk\ApplicationPlugins\${RVT_BUNDLE_NAME}\Logo.ico"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${BUNDLE_NAME}" "DisplayName" "Points4Revit plugin"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${BUNDLE_NAME}" "InstallLocation" "$APPDATA\Autodesk\ApplicationPlugins\${RVT_BUNDLE_NAME}"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${BUNDLE_NAME}" "UninstallString" "$\"$APPDATA\Autodesk\ApplicationPlugins\${RVT_BUNDLE_NAME}\Uninstall.exe$\"" 
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${BUNDLE_NAME}" "Publisher" "${PUBLISHER}"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${BUNDLE_NAME}" "DisplayVersion" "${BUNDLE_VERSION}"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${BUNDLE_NAME}" "HelpLink" "https://github.com/sergeysshevtsov/Points4Revit"
+	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${BUNDLE_NAME}" "NoModify" "1"
+	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${BUNDLE_NAME}" "NoRepair" "1"
+
 	RMDir /r "$APPDATA\Autodesk\ApplicationPlugins\${RVT_BUNDLE_NAME}"	
 	SetOutPath "$APPDATA\Autodesk\ApplicationPlugins\"
 		File /nonfatal /a /r "${RVT_BUNDLE_NAME}"
+
+	WriteUninstaller "$APPDATA\Autodesk\ApplicationPlugins\${RVT_BUNDLE_NAME}\Uninstall.exe"
 SectionEnd
 
 Section "${PRODUCT_NAME}.AutoCAD" Section2
+	SectionIn RO
 	SetShellVarContext "all"
 	SetOverwrite on
 	RMDir /r "$APPDATA\Autodesk\ApplicationPlugins\${ACD_BUNDLE_NAME}"	
@@ -79,3 +93,10 @@ LangString DESC_Section1 ${LANG_ENGLISH} "AutoCAD Revit, ${ACD_BUNDLE_NAME}"
   !insertmacro MUI_DESCRIPTION_TEXT ${Section1} $(DESC_Section1)
   !insertmacro MUI_DESCRIPTION_TEXT ${Section2} $(DESC_Section2)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+Section "Uninstall"
+	SetShellVarContext "all"
+	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${BUNDLE_NAME}"
+	RMDir /r "$APPDATA\Autodesk\ApplicationPlugins\${RVT_BUNDLE_NAME}"
+	RMDir /r "$APPDATA\Autodesk\ApplicationPlugins\${ACD_BUNDLE_NAME}"	
+SectionEnd

@@ -76,10 +76,12 @@ namespace Points4Revit.RVT.RevitService
                         }
 
                         newWallType.SetCompoundStructure(cs);
-                        wallThicknessCreationPoints = new List<PointData>();
                         elementId = newWallType.Id;
                     }
-                    catch { }
+                    catch 
+                    {
+                        
+                    }
 
                 if (!elementId.Equals(ElementId.InvalidElementId))
                 {
@@ -98,6 +100,7 @@ namespace Points4Revit.RVT.RevitService
                     foreach (var wall in dc.Walls)
                         wall.WallType = newWallType;
 
+                wallThicknessCreationPoints.Clear();
                 var transactionStatus = tr.Commit();
             }
 
