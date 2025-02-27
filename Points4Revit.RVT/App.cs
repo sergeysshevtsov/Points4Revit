@@ -67,7 +67,7 @@ namespace Points4Revit.RVT
                 rb.AddItem(
                     new PushButtonData("cmdWallThickness", "Wall\nThickness", assemblyPath, "Points4Revit.RVT.AppCommands.CmdCreateWallThicknessCreation")
                     {
-                        ToolTip = "Change selecrted wall thickness",
+                        ToolTip = "Change selected wall thickness",
                         LargeImage = new BitmapImage(new Uri(string.Concat(resourceString, "32x32/WallThickness.png")))
                     });
                 //Add ribbon button family creation

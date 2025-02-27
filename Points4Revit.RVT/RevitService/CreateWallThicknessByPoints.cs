@@ -13,28 +13,32 @@ namespace Points4Revit.RVT.RevitService
         private static List<PointData> wallThicknessCreationPoints = new List<PointData>();
         public static List<ElementId> Commit(UIApplication app, WallThicknessCreationDataContext dc, ObjectData objectData)
         {
-            var document = app.ActiveUIDocument.Document;
-            var elementId = ElementId.InvalidElementId;
 
-            using (Transaction tr = new Transaction(document, "Create wall by points"))
+
+            var objectType = objectData.ObjectType;
+            var points = objectData.PointData;
+            var elementIDList = new List<ElementId>();
+
+            switch (objectType)
             {
-                tr.Start();
+                case Core.Enums.ObjectType.Point:
+                    wallThicknessCreationPoints.Add(points[0]);
+                    break;
+            }
 
-                var objectType = objectData.ObjectType;
-                var points = objectData.PointData;
-                var elementIDList = new List<ElementId>();
 
-                switch (objectType)
-                {
-                    case Core.Enums.ObjectType.Point:
-                        wallThicknessCreationPoints.Add(points[0]);
-                        break;
-                }
+            if (wallThicknessCreationPoints.Count == 3)
+            {
+                var document = app.ActiveUIDocument.Document;
+                var elementId = ElementId.InvalidElementId;
 
                 WallType newWallType = null;
-                if (wallThicknessCreationPoints.Count == 3)
-                    try
+                try
+                {
+                    using (Transaction tr = new Transaction(document, "Create wall by points"))
                     {
+                        tr.Start();
+
                         var selectedWallType = document.GetElement(dc.WallType.Id) as WallType;
 
                         var sp = new XYZ(wallThicknessCreationPoints[0].X, wallThicknessCreationPoints[0].Y, wallThicknessCreationPoints[0].Z);
@@ -77,11 +81,15 @@ namespace Points4Revit.RVT.RevitService
 
                         newWallType.SetCompoundStructure(cs);
                         elementId = newWallType.Id;
+
+                        wallThicknessCreationPoints.Clear();
+                        var transactionStatus = tr.Commit();
                     }
-                    catch 
-                    {
-                        
-                    }
+                }
+                catch
+                {
+                    wallThicknessCreationPoints.Clear();
+                }
 
                 if (!elementId.Equals(ElementId.InvalidElementId))
                 {
@@ -99,11 +107,7 @@ namespace Points4Revit.RVT.RevitService
                 if (dc.ApplyNewWallType && dc.NumberOfSelectedWalls != 0)
                     foreach (var wall in dc.Walls)
                         wall.WallType = newWallType;
-
-                wallThicknessCreationPoints.Clear();
-                var transactionStatus = tr.Commit();
             }
-
             return null;
         }
     }
